@@ -10,7 +10,7 @@ ScannerClass::ScannerClass(std::string filename) {
     mFin.open(filename,std::ifstream::in);
     if (!mFin.is_open()) {
         std::cout <<"ERROR: unable to open file: " << filename;
-        exit(1);
+        exit(EXIT_FAILURE);
     } 
     mLineNumber = 1;
     MSG("Scanner object created!")
@@ -45,7 +45,7 @@ TokenClass ScannerClass::GetNextToken() {
     mFin.unget();
     if (CTT == BAD_TOKEN) {
         std::cout << "Error: BAD_TOKEN_TYPE on " << lexeme << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     } 
     lexeme.pop_back();
     TokenClass token(CTT,lexeme);

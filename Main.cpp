@@ -37,6 +37,6 @@ int main() {
     std::cout << "WHAT IS THE VALUE? " << s.GetValue("world") << std::endl;
     std::cout << "WHAT IS THE INDEX? " << s.GetIndex("world") << std::endl;
     std::cout << "WHAT IS THE NUMBER OF VARIABLES? " << s.GetCount() << std::endl;
-    //s.AddEntry("hello");
+    s.AddEntry("hello");
     std::cout << "DOES DANG HAVE AN INDEX? " << s.GetIndex("dang") << std::endl;
 }

@@ -22,7 +22,7 @@ void SymbolTableClass::AddEntry(const std::string & s){
         } else {
                 std::cout << "Variable \"" << s << "\" already exists" << std::endl;
                 std::cout << "Quitting" << std::endl;
-                exit(1);
+                exit(EXIT_FAILURE);
         }
 }
         //adds <s> to the symbol table
@@ -36,7 +36,7 @@ int SymbolTableClass::GetValue(const std::string & s){
         }
         std::cout << "Variable \"" << s << "\" does not exist" << std::endl;
         //QUIT HERE
-        exit(1);
+        exit(EXIT_FAILURE);
 }
         //return the current value of variable <s>, on interpret
         // Meaningless on Code and Execute
@@ -50,7 +50,7 @@ void SymbolTableClass::SetValue(const std::string & s,int v){
                 }
         }
         std::cout << "Variable \"" << s << "\" does not exist" << std::endl;
-        exit(1);
+        exit(EXIT_FAILURE);
         
 }
         //set variable <s> to given value on interpret
