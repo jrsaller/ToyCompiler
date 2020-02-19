@@ -19,7 +19,7 @@
     return 0;
 } */
 //SYMBOL TABLE TESTING/PASSOFF
-int main() {
+/*int main() {
     SymbolTableClass s = SymbolTableClass();
     std::cout << "DOES IT EXIST? " << s.Exists("hello") << std::endl;
     s.AddEntry("hello");
@@ -39,4 +39,8 @@ int main() {
     std::cout << "WHAT IS THE NUMBER OF VARIABLES? " << s.GetCount() << std::endl;
     s.AddEntry("hello");
     std::cout << "DOES DANG HAVE AN INDEX? " << s.GetIndex("dang") << std::endl;
+}*/
+
+int main() {
+    
 }

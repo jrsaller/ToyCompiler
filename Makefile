@@ -1,6 +1,6 @@
 CXXFLAGS := -std=c++11
 
-main: Main.o Token.o StateMachine.o Scanner.o Symbol.o
+main: Main.o Token.o StateMachine.o Scanner.o Symbol.o Node.o
 	g++ $(CXXFLAGS) -o $@ $^
 
 Main.o: Main.cpp Token.h
@@ -16,6 +16,9 @@ StateMachine.o: StateMachine.cpp StateMachine.h
 	g++ $(CXXFLAGS) -c $<
 
 Symbol.o: Symbol.cpp Symbol.h
+	g++ $(CXXFLAGS) -c $<
+
+Node.o: Node.cpp Node.h
 	g++ $(CXXFLAGS) -c $<
 
 
