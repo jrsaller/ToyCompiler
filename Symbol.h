@@ -1,3 +1,5 @@
+#ifndef SYMBOL
+#define SYMBOL
 #include <string>
 #include <vector>
 
@@ -33,3 +35,5 @@ class SymbolTableClass {
         std::vector<Variable> SymbolTable;
 
 };
+
+#endif

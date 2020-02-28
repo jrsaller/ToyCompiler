@@ -1,5 +1,5 @@
 //debug.h
-#define ShowMessages 0 //0 or 0
+#define ShowMessages 0 //0 or 1
 
 #include <iostream>
 
