@@ -4,6 +4,7 @@
 #include "Scanner.h"
 #include "Symbol.h"
 #include "Node.h"
+#include "Parser.h"
 
 //TOKEN CLASS PASS OFF
 /* int main() {
@@ -153,5 +154,19 @@
 */
 
 int main() {
-    
+    ScannerClass scanner("testfile.cpp");
+    SymbolTableClass st;
+    ParserClass parse(&scanner,&st);
+    parse.Start();
+    // while(true) {
+    //     NextToken = scanner.GetNextToken();
+    //     std::cout << "Line " << scanner.GetLineNumber() << ": " <<  NextToken << std::endl;
+    //     if (NextToken.GetTokenType() == ENDFILE_TOKEN) {
+    //         break;
+    //     }
+    //     TokenClass PeekedToken = scanner.PeekNextToken();
+    //     std::cout << "Peeked: " << PeekedToken << std::endl << std::endl;
+    // }
+    std::cout << "You've got valid code!" << std::endl;
+    return 0;
 }

@@ -43,13 +43,7 @@ class ProgramNode : public Node {
     private:
         BlockNode* mNode;
 };
-class BlockNode : public Node {
-    public:
-        BlockNode(StatementGroupNode* node);
-        ~BlockNode();
-    private:
-        StatementGroupNode* mNode;
-};
+
 class StatementGroupNode : public Node {
     public:
         StatementGroupNode();
@@ -88,6 +82,13 @@ class CoutStatementNode: public StatementNode {
         ~CoutStatementNode();
     private:
         ExpressionNode* mNode;
+};
+class BlockNode : public StatementNode {
+    public:
+        BlockNode(StatementGroupNode* node);
+        ~BlockNode();
+    private:
+        StatementGroupNode* mNode;
 };
 
 class ExpressionNode {

@@ -12,6 +12,7 @@ class ScannerClass {
         ScannerClass(std::string filename);
         ~ScannerClass();
         TokenClass GetNextToken();
+        TokenClass PeekNextToken();
         int GetLineNumber() const { return mLineNumber; }
     private:
         std::ifstream mFin;

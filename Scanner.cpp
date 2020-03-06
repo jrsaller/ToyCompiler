@@ -17,7 +17,6 @@ ScannerClass::ScannerClass(std::string filename) {
 }
 
 ScannerClass::~ScannerClass() {
-    MSG("Destroying Scanner object...")
     mFin.close();
     MSG("Scanner object destroyed.")
 
@@ -30,7 +29,7 @@ TokenClass ScannerClass::GetNextToken() {
     std::string lexeme;
     do {
         char c = mFin.get();
-        MSG(c);
+        
         state = stateMachine.UpdateState(c,CTT);
         //if (state != CANTMOVE_STATE) {
         lexeme+=c;
@@ -38,9 +37,10 @@ TokenClass ScannerClass::GetNextToken() {
         if (state == START_STATE || state == COMMENT_STATE) {
             lexeme = "";
         }
-        if (c == '\n' and state != CANTMOVE_STATE) {
+        if (c == '\n' && state != CANTMOVE_STATE) {
             mLineNumber+=1;
         }
+        
     } while(state != CANTMOVE_STATE);
     mFin.unget();
     if (CTT == BAD_TOKEN) {
@@ -52,4 +52,18 @@ TokenClass ScannerClass::GetNextToken() {
     token.CheckReserved();
     
     return token;
+}
+
+TokenClass ScannerClass::PeekNextToken() {
+    MSG("PEEKING TOKEN")
+    int pos = mFin.tellg();
+    int currentLine = mLineNumber;
+    TokenClass tx = GetNextToken();
+    if (!mFin) {
+        mFin.clear();
+    }
+    mLineNumber = currentLine;
+    mFin.seekg(pos);
+    MSG("TOKEN PEEKED")
+    return tx;
 }
