@@ -14,6 +14,10 @@ StartNode::~StartNode() {
     delete(mNode);
 }
 
+void StartNode::Interpret() {
+    mNode->Interpret();
+}
+
 ProgramNode::ProgramNode(BlockNode* node){
     MSG("CREATED PROGRAM");
     this->mNode = node;
@@ -24,6 +28,10 @@ ProgramNode::~ProgramNode(){
     delete(mNode);
 }
 
+void ProgramNode::Interpret() {
+    mNode->Interpret();
+}
+
 BlockNode::BlockNode(StatementGroupNode* node) {
     MSG("CREATED BLOCK");
     this->mNode = node;
@@ -32,6 +40,10 @@ BlockNode::BlockNode(StatementGroupNode* node) {
 BlockNode::~BlockNode() {
     MSG("DELETED BLOCK NODE");
     delete(mNode);
+}
+
+void BlockNode::Interpret() {
+    mNode->Interpret();
 }
 
 StatementGroupNode::StatementGroupNode() {
@@ -50,6 +62,12 @@ void StatementGroupNode::AddStatement(StatementNode* node) {
     mNodes.push_back(node);
 }
 
+void StatementGroupNode::Interpret() {
+    for (StatementNode* node: mNodes) {
+        node->Interpret();
+    }
+}
+
 StatementNode::~StatementNode() {
     MSG("DELETE STATEMENT NODE");
 }
@@ -64,6 +82,10 @@ DeclarationStatementNode::~DeclarationStatementNode() {
     delete(mNode);
 }
 
+void DeclarationStatementNode::Interpret() {
+    mNode->DeclareVariable();
+}
+
 AssignmentStatementNode::AssignmentStatementNode(IdentifierNode* idnode,ExpressionNode* expnode) {
     mIdNode = idnode;
     mExpNode = expnode;
@@ -76,6 +98,11 @@ AssignmentStatementNode::~AssignmentStatementNode() {
     delete(mExpNode);
 }
 
+void AssignmentStatementNode::Interpret() {
+    int val = mExpNode->Evaluate();
+    mIdNode->SetValue(val);
+}
+
 CoutStatementNode::CoutStatementNode(ExpressionNode* node) {
     mNode = node;
     MSG("CREATED COUT NODE");
@@ -84,6 +111,11 @@ CoutStatementNode::CoutStatementNode(ExpressionNode* node) {
 CoutStatementNode::~CoutStatementNode() {
     MSG("DELETED COUT NODE");
     delete(mNode);
+}
+
+void CoutStatementNode::Interpret() {
+    int val = mNode->Evaluate();
+    std::cout << val << std::endl;
 }
 
 ExpressionNode::~ExpressionNode() {
@@ -99,10 +131,14 @@ int IntegerNode::Evaluate() {
     return mInt;
 }
 
+IntegerNode::~IntegerNode() {
+    MSG("DELETING INTEGER NODE WITH " << mInt);
+}
+
 IdentifierNode::IdentifierNode(std::string label, SymbolTableClass* st) {
     mSymbolTable = st;
     mLabel = label;
-    MSG("CREATE ID NODE");
+    MSG("CREATE ID NODE "<<mLabel);
 }
 
 void IdentifierNode::DeclareVariable() {
@@ -119,6 +155,10 @@ int IdentifierNode::GetIndex() {
 
 int IdentifierNode::Evaluate() {
     return mSymbolTable->GetValue(mLabel);
+}
+
+IdentifierNode::~IdentifierNode() {
+    MSG("DELETING IDENTIFIER NODE WITH " << mLabel);
 }
 
 BinaryOperatorNode::BinaryOperatorNode(ExpressionNode* lnode,ExpressionNode* rnode) {

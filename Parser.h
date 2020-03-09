@@ -7,24 +7,24 @@
 class ParserClass {
     public:
         ParserClass(ScannerClass * scanner,SymbolTableClass * st);
-        void Start();
+        StartNode * Start();
     private:
         TokenClass Match(TokenType expectedType);
-        void Program();
+        ProgramNode * Program();
         void Term();
-        void Block();
-        void StatementGroup();
-        bool Statement();
-        void Expression();
-        void Relational();
-        void PlusMinus();
-        void TimesDivide();
-        void Factor();
-        void Identifier();
-        void Integer();
-        void DeclarationStatement();
-        void AssignmentStatement();
-        void CoutStatement();
+        BlockNode * Block();
+        StatementGroupNode * StatementGroup();
+        StatementNode * Statement();
+        ExpressionNode * Expression();
+        ExpressionNode * Relational();
+        ExpressionNode * PlusMinus();
+        ExpressionNode * TimesDivide();
+        ExpressionNode * Factor();
+        IdentifierNode * Identifier();
+        IntegerNode * Integer();
+        DeclarationStatementNode * DeclarationStatement();
+        AssignmentStatementNode * AssignmentStatement();
+        CoutStatementNode * CoutStatement();
         ScannerClass * mScanner;
         SymbolTableClass * mSymbolTable;
 };

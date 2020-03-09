@@ -55,7 +55,7 @@ TokenClass ScannerClass::GetNextToken() {
 }
 
 TokenClass ScannerClass::PeekNextToken() {
-    MSG("PEEKING TOKEN")
+    MSG("\n===PEEK START===")
     int pos = mFin.tellg();
     int currentLine = mLineNumber;
     TokenClass tx = GetNextToken();
@@ -64,6 +64,6 @@ TokenClass ScannerClass::PeekNextToken() {
     }
     mLineNumber = currentLine;
     mFin.seekg(pos);
-    MSG("TOKEN PEEKED")
+    MSG("===PEEK END===\n")
     return tx;
 }

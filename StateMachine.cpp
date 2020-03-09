@@ -2,7 +2,6 @@
 #include "Debug.h"
 
 StateMachineClass::StateMachineClass(){
-    MSG("Initializing State Machine object...")
     mCurrentState = START_STATE;
 
     for (int i = 0; i< NUM_STATES;i++) {
@@ -80,7 +79,6 @@ StateMachineClass::StateMachineClass(){
     mCorrespondingTokenTypes[RCURLY_STATE] = RCURLY_TOKEN;
     mCorrespondingTokenTypes[ENDFILE_STATE] = ENDFILE_TOKEN;
 
-    MSG("State Machine object created!")
 
 }
 MachineState StateMachineClass::UpdateState(char currentCharacter,TokenType & correspondingTokenType){

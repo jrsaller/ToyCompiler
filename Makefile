@@ -3,7 +3,7 @@ CXXFLAGS := -std=c++11
 main: Main.o Token.o StateMachine.o Scanner.o Symbol.o Node.o Parser.o
 	g++ $(CXXFLAGS) -o $@ $^
 
-Main.o: Main.cpp Token.h
+Main.o: Main.cpp Token.h Debug.h
 	g++ $(CXXFLAGS) -c $<
 
 Token.o: Token.cpp Token.h

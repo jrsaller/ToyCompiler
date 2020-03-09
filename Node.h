@@ -8,13 +8,13 @@
 class Node;
 class StartNode;
 class ProgramNode;
-class BlockNode;
 class StatementGroupNode;
 
 class StatementNode;
 class DeclarationStatementNode;
 class AssignmentStatementNode;
 class CoutStatementNode;
+class BlockNode;
 
 class ExpressionNode;
 class IntegerNode;
@@ -22,16 +22,27 @@ class IdentifierNode;
 
 class BinaryOperatorNode;
 class PlusNode;
+class MinusNode;
+class TimesNode;
+class DivideNode;
+class LessNode;
+class LessEqualNode;
+class GreaterNode;
+class GreaterEqualNode;
+class NotEqualNode;
+class EqualNode;
 
 class Node {
     public:
         virtual ~Node();
+        virtual void Interpret()=0;
 };
 
 class StartNode : public Node {
     public:
         StartNode(ProgramNode* node);
         ~StartNode();
+        void Interpret();
     private:
         ProgramNode* mNode;
 };
@@ -40,6 +51,7 @@ class ProgramNode : public Node {
     public:
         ProgramNode(BlockNode* node);
         ~ProgramNode();
+        void Interpret();
     private:
         BlockNode* mNode;
 };
@@ -49,6 +61,7 @@ class StatementGroupNode : public Node {
         StatementGroupNode();
         ~StatementGroupNode();
         void AddStatement(StatementNode* node);
+        void Interpret();
 
     private:
         std::vector<StatementNode*> mNodes;
@@ -63,6 +76,7 @@ class DeclarationStatementNode: public StatementNode {
     public:
         DeclarationStatementNode(IdentifierNode* mNode);
         ~DeclarationStatementNode();
+        void Interpret();
     private:
         IdentifierNode* mNode;
 };
@@ -71,6 +85,7 @@ class AssignmentStatementNode:public StatementNode {
     public:
         AssignmentStatementNode(IdentifierNode* idnode,ExpressionNode* expnode);
         ~AssignmentStatementNode();
+        void Interpret();
     private:
         IdentifierNode* mIdNode;
         ExpressionNode* mExpNode;
@@ -80,6 +95,7 @@ class CoutStatementNode: public StatementNode {
     public:
         CoutStatementNode(ExpressionNode* node);
         ~CoutStatementNode();
+        void Interpret();
     private:
         ExpressionNode* mNode;
 };
@@ -87,6 +103,7 @@ class BlockNode : public StatementNode {
     public:
         BlockNode(StatementGroupNode* node);
         ~BlockNode();
+        void Interpret();
     private:
         StatementGroupNode* mNode;
 };
@@ -102,6 +119,7 @@ class IntegerNode: public ExpressionNode {
     public:
         IntegerNode(int num);
         int Evaluate();
+        ~IntegerNode();
     private:
         int mInt;
 };
@@ -113,6 +131,7 @@ class IdentifierNode: public ExpressionNode {
         void SetValue(int v);
         int GetIndex();
         int Evaluate();
+        ~IdentifierNode();
     private:
         std::string mLabel;
         SymbolTableClass* mSymbolTable;

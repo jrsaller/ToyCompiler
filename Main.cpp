@@ -157,7 +157,8 @@ int main() {
     ScannerClass scanner("testfile.cpp");
     SymbolTableClass st;
     ParserClass parse(&scanner,&st);
-    parse.Start();
+    StartNode * sn = parse.Start();
+    sn->Interpret();
     // while(true) {
     //     NextToken = scanner.GetNextToken();
     //     std::cout << "Line " << scanner.GetLineNumber() << ": " <<  NextToken << std::endl;
@@ -168,5 +169,6 @@ int main() {
     //     std::cout << "Peeked: " << PeekedToken << std::endl << std::endl;
     // }
     std::cout << "You've got valid code!" << std::endl;
+    delete sn;
     return 0;
 }
