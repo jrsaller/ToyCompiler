@@ -16,6 +16,8 @@ class ParserClass {
         StatementGroupNode * StatementGroup();
         StatementNode * Statement();
         ExpressionNode * Expression();
+        ExpressionNode * Or();
+        ExpressionNode * And();
         ExpressionNode * Relational();
         ExpressionNode * PlusMinus();
         ExpressionNode * TimesDivide();
@@ -25,6 +27,8 @@ class ParserClass {
         DeclarationStatementNode * DeclarationStatement();
         AssignmentStatementNode * AssignmentStatement();
         CoutStatementNode * CoutStatement();
+        IfStatementNode * IfStatement();
+        WhileStatementNode * WhileStatement();
         ScannerClass * mScanner;
         SymbolTableClass * mSymbolTable;
 };

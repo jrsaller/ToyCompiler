@@ -1,5 +1,6 @@
 #include <fstream>
 #include <stdlib.h>
+#include <ios>
 #include "Token.h"
 #include "Scanner.h"
 #include "StateMachine.h"
@@ -7,7 +8,8 @@
 
 ScannerClass::ScannerClass(std::string filename) {
     MSG("Initialzing Scanner object")
-    mFin.open(filename,std::ifstream::in);
+    //mFin.open(filename,std::ifstream::in);
+    mFin.open(filename.c_str(),std::ios::binary);
     if (!mFin.is_open()) {
         std::cout <<"ERROR: unable to open file: " << filename;
         exit(EXIT_FAILURE);
@@ -31,9 +33,7 @@ TokenClass ScannerClass::GetNextToken() {
         char c = mFin.get();
         
         state = stateMachine.UpdateState(c,CTT);
-        //if (state != CANTMOVE_STATE) {
         lexeme+=c;
-        //}
         if (state == START_STATE || state == COMMENT_STATE) {
             lexeme = "";
         }
@@ -56,7 +56,7 @@ TokenClass ScannerClass::GetNextToken() {
 
 TokenClass ScannerClass::PeekNextToken() {
     MSG("\n===PEEK START===")
-    int pos = mFin.tellg();
+    std::streamoff pos = mFin.tellg();
     int currentLine = mLineNumber;
     TokenClass tx = GetNextToken();
     if (!mFin) {

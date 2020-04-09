@@ -22,8 +22,10 @@ void TokenClass::CheckReserved(){
         mType=INT_TOKEN;
     } else if (mLexeme == "cout") {
         mType=COUT_TOKEN;
-    //} else if (mLexeme == "if") {
-    //    mType=IF_TOKEN;
+    } else if (mLexeme == "if") {
+        mType=IF_TOKEN;
+    } else if (mLexeme == "while") {
+        mType = WHILE_TOKEN;
     }
 }
 std::ostream& operator<<(std::ostream & out, const TokenClass & tc){

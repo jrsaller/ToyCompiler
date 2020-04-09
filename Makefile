@@ -1,33 +1,24 @@
-CXXFLAGS := -std=c++11
+# This Makefile turns off exec protection
+CXXFLAGS=-fno-stack-protector -D_FORTIFY_SOURCE=0
+CXXFLAGS += -std=c++11
 
-main: Main.o Token.o StateMachine.o Scanner.o Symbol.o Node.o Parser.o
-	g++ $(CXXFLAGS) -o $@ $^
+toy: main.o token.o symbol.o parser.o scanner.o node.o instructions.o StateMachine.o
+	$(CXX) -o $@ $^ 
+	execstack -s $@
+instructions: instructions.o instructions_tester.o
+	$(CXX) -o $@ $^ 
+	execstack -s $@
 
-Main.o: Main.cpp Token.h Debug.h
-	g++ $(CXXFLAGS) -c $<
-
-Token.o: Token.cpp Token.h
-	g++ $(CXXFLAGS) -c $<
-
-Scanner.o: Scanner.cpp Scanner.h Token.h StateMachine.h
-	g++ $(CXXFLAGS) -c $<
-
-StateMachine.o: StateMachine.cpp StateMachine.h
-	g++ $(CXXFLAGS) -c $<
-
-Symbol.o: Symbol.cpp Symbol.h
-	g++ $(CXXFLAGS) -c $<
-
-Node.o: Node.cpp Node.h
-	g++ $(CXXFLAGS) -c $<
-
-Parser.o: Parser.cpp Parser.h
-	g++ $(CXXFLAGS) -c $<
-
-
+instructions_tester.o: instructions.h
+instructions.o: instructions.cpp instructions.h
+symbol.o: symbol.cpp symbol.h debug.h
+token.o: token.cpp token.h debug.h
+scanner.o: scanner.cpp scanner.h debug.h token.h StateMachine.h
+node.o: node.cpp node.h debug.h symbol.h instructions.h
+parser.o: parser.cpp parser.h debug.h token.h scanner.h symbol.h node.h
+main.o: main.cpp scanner.h symbol.h parser.h node.h token.h instructions.h debug.h
+StateMachine.o: StateMachine.cpp StateMachine.h token.h debug.h
 
 clean:
-	rm *.o main
-
-
-
+	@echo "doing a clean:"
+	rm -f *.o toy instructions

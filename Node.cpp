@@ -119,12 +119,50 @@ void CoutStatementNode::Interpret() {
 }
 
 ExpressionNode::~ExpressionNode() {
-    MSG("DELETE EXPRESSION NODE")
+    MSG("DELETE EXPRESSION NODE");
 }
+
+IfStatementNode::IfStatementNode(ExpressionNode * exp,StatementNode * statement) {
+    mExpression = exp;
+    mStatement = statement;
+}
+
+IfStatementNode::~IfStatementNode() {
+    MSG("DELETE IFSTATEMENT NODE");
+    delete(mExpression);
+    delete(mStatement);
+
+}
+
+void IfStatementNode::Interpret() {
+    if (mExpression->Evaluate()) {
+        mStatement->Interpret();
+    }
+}
+
+WhileStatementNode::WhileStatementNode(ExpressionNode * exp,StatementNode * statement) {
+    mExpression = exp;
+    mStatement = statement;
+}
+
+WhileStatementNode::~WhileStatementNode() {
+    MSG("DELETE WHILE STATEMENT NODE");
+    delete(mExpression);
+    delete(mStatement);
+
+}
+
+void WhileStatementNode::Interpret() {
+    while (mExpression->Evaluate()) {
+        MSG("INTERPRET TIME");
+        mStatement->Interpret();
+    }
+}
+
 
 IntegerNode::IntegerNode(int num) {
     mInt = num;
-    MSG("CREATE INTEGER NODE")
+    MSG("CREATE INTEGER NODE");
 }
 
 int IntegerNode::Evaluate() {
@@ -216,6 +254,7 @@ LessNode::LessNode(ExpressionNode* left, ExpressionNode* right)
     }
 
 int LessNode::Evaluate() {
+    MSG("EVAL LESS NODE");
     return mLeftNode->Evaluate() < mRightNode->Evaluate();
 }
 
@@ -265,3 +304,21 @@ NotEqualNode::NotEqualNode(ExpressionNode* left, ExpressionNode* right)
 int NotEqualNode::Evaluate() {
     return mLeftNode->Evaluate() != mRightNode->Evaluate();
 }
+
+AndNode::AndNode(ExpressionNode * left, ExpressionNode * right)
+    :BinaryOperatorNode(left,right) {
+        MSG("CREATED AND NODE");
+    }
+
+int AndNode::Evaluate() {
+    return mLeftNode->Evaluate() && mRightNode->Evaluate();
+} 
+
+OrNode::OrNode(ExpressionNode * left, ExpressionNode * right)
+    :BinaryOperatorNode(left,right) {
+        MSG("CREATED OR NODE");
+    }
+
+int OrNode::Evaluate() {
+    return mLeftNode->Evaluate() || mRightNode->Evaluate();
+} 

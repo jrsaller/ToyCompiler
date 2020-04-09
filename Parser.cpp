@@ -45,6 +45,7 @@ ProgramNode *  ParserClass::Program() {
 
 //OK
 BlockNode *  ParserClass::Block() {
+    MSG("Block");
     Match(LCURLY_TOKEN);
     StatementGroupNode * s = StatementGroup();
     Match(RCURLY_TOKEN);
@@ -80,10 +81,16 @@ StatementNode *  ParserClass::Statement() {
     } else if (t==COUT_TOKEN) {
         CoutStatementNode * s = CoutStatement();
         return s;
-    } else if (t == LPAREN_TOKEN) {
+    } else if (t == LCURLY_TOKEN) {
         BlockNode * s = Block();
         return s;
-    } else  {
+    } else if (t==IF_TOKEN) {
+        IfStatementNode * s = IfStatement();
+        return s;
+    } else if (t==WHILE_TOKEN) {
+        WhileStatementNode * s = WhileStatement();
+        return s;
+    } else   {
         return 0;
     }
 }
@@ -114,14 +121,63 @@ CoutStatementNode * ParserClass::CoutStatement(){
     return new CoutStatementNode(e);
 }
 
+IfStatementNode * ParserClass::IfStatement() {
+    MSG("If Statement");
+    Match(IF_TOKEN);
+    Match(LPAREN_TOKEN);
+    ExpressionNode * expression = Expression();
+    Match(RPAREN_TOKEN);
+    StatementNode * statement = Statement();
+    return new IfStatementNode(expression,statement);
+}
+
+
+WhileStatementNode * ParserClass::WhileStatement() {
+    MSG("While Statement");
+    Match(WHILE_TOKEN);
+    Match(LPAREN_TOKEN);
+    ExpressionNode * expression = Expression();
+    Match(RPAREN_TOKEN);
+    StatementNode * statement = Statement();
+    return new WhileStatementNode(expression,statement);
+}
+
 ExpressionNode * ParserClass::Expression() {
     MSG("Expression");
-    ExpressionNode * e = Relational();
+    ExpressionNode * e = Or();
     return e;
 }
 
+ExpressionNode * ParserClass::Or() {
+    MSG("Parser.cpp : Or");
+    ExpressionNode * current = And();
+    while(true) {
+        TokenType tt = mScanner->PeekNextToken().GetTokenType();
+        if (tt==OR_TOKEN) {
+            Match(tt);
+            current = new OrNode(current,And());
+        } else {
+            return current;
+        }
+    }
+}
+
+ExpressionNode * ParserClass::And() {
+    MSG("Parser.cpp : And");
+    ExpressionNode * current = Relational();
+    while(true) {
+        TokenType tt = mScanner->PeekNextToken().GetTokenType();
+        if (tt==AND_TOKEN) {
+            Match(tt);
+            current = new AndNode(current,Relational());
+        } else {
+            return current;
+        }
+    }
+}
+
 ExpressionNode * ParserClass::Relational() {
-    MSG("Relational");
+    MSG("Parser.cpp : Relational");
     ExpressionNode * current = PlusMinus();
     //Handle Optional tail
     TokenType tt = mScanner->PeekNextToken().GetTokenType();
@@ -143,14 +199,12 @@ ExpressionNode * ParserClass::Relational() {
     } else if (tt == NOTEQUAL_TOKEN){
         Match(tt);
         current = new NotEqualNode(current,PlusMinus());
-    }else {
-        return current;
     }
     return current;
 }
 
 ExpressionNode * ParserClass::PlusMinus() {
-    MSG("Plus Minus");
+    MSG("Parser.cpp : Plus Minus");
     ExpressionNode * current = TimesDivide();
     while(true) {
         TokenType tt = mScanner->PeekNextToken().GetTokenType();
@@ -161,13 +215,14 @@ ExpressionNode * ParserClass::PlusMinus() {
             Match(tt);
             current = new MinusNode(current,TimesDivide());
         } else {
+            MSG("LEAVING PARSERCLASS::PLUSMINUS")
             return current;
         }
     }
 }
 
 ExpressionNode * ParserClass::TimesDivide() {
-    MSG("Times Divide");
+    MSG("Parser.cpp : Times Divide");
     ExpressionNode * current = Factor();
     while(true) {
         TokenType tt = mScanner->PeekNextToken().GetTokenType();
@@ -178,13 +233,15 @@ ExpressionNode * ParserClass::TimesDivide() {
             Match(tt);
             current = new DivideNode(current,Factor());
         } else {
+            MSG("LEAVING PARSERCLASS::TIMESDIVIDE")
             return current;
         }
     }
 }
 
+
 ExpressionNode * ParserClass::Factor() {
-    MSG("Factor");
+    MSG("Parser.cpp : Factor");
     TokenType tt = mScanner->PeekNextToken().GetTokenType();
     if (tt == IDENTIFIER_TOKEN) {
         return Identifier();
@@ -201,7 +258,7 @@ ExpressionNode * ParserClass::Factor() {
 }
 
 IdentifierNode * ParserClass::Identifier() {
-    MSG("Identifier");
+    MSG("Parser.cpp : Identifier");
     TokenClass t = Match(IDENTIFIER_TOKEN);
     //Use lexeme to make and return ID node
     std::string lex = t.GetLexeme();
@@ -212,10 +269,11 @@ IdentifierNode * ParserClass::Identifier() {
 }
 
 IntegerNode * ParserClass::Integer() {
-    MSG("Integer")
+    MSG("Parser.cpp : Integer")
     TokenClass t = Match(INTEGER_TOKEN);
     std::string lex = t.GetLexeme();
     int num = atoi(lex.c_str());
     IntegerNode * n = new IntegerNode(num);
+    MSG("LEAVING INTEGER");
     return n;
 }

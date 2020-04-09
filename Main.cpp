@@ -153,22 +153,28 @@
 }
 */
 
+/*
 int main() {
     ScannerClass scanner("testfile.cpp");
     SymbolTableClass st;
     ParserClass parse(&scanner,&st);
     StartNode * sn = parse.Start();
     sn->Interpret();
-    // while(true) {
-    //     NextToken = scanner.GetNextToken();
-    //     std::cout << "Line " << scanner.GetLineNumber() << ": " <<  NextToken << std::endl;
-    //     if (NextToken.GetTokenType() == ENDFILE_TOKEN) {
-    //         break;
-    //     }
-    //     TokenClass PeekedToken = scanner.PeekNextToken();
-    //     std::cout << "Peeked: " << PeekedToken << std::endl << std::endl;
-    // }
+    
     std::cout << "You've got valid code!" << std::endl;
     delete sn;
     return 0;
+}*/
+
+using namespace std;
+int main()
+{
+	unsigned char mCode[] = {0x55, 0x8B, 0xEC, 0X5d, 0XC3};
+	cout << "About to Execute the machine code...\n";
+	void * ptr = mCode;
+	void (*f)(void);
+	f = (void (*)(void)) ptr ;
+	f(); // call the array as if it were a function
+	cout << "There and back again!\n\n";
+	return 0;
 }

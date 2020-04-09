@@ -15,6 +15,8 @@ class DeclarationStatementNode;
 class AssignmentStatementNode;
 class CoutStatementNode;
 class BlockNode;
+class IfStatementNode;
+class WhileStatementNode;
 
 class ExpressionNode;
 class IntegerNode;
@@ -31,6 +33,8 @@ class GreaterNode;
 class GreaterEqualNode;
 class NotEqualNode;
 class EqualNode;
+class AndNode;
+class OrNode;
 
 class Node {
     public:
@@ -108,12 +112,37 @@ class BlockNode : public StatementNode {
         StatementGroupNode* mNode;
 };
 
+class IfStatementNode : public StatementNode {
+    public:
+        IfStatementNode(ExpressionNode * exp,StatementNode * statement);
+        ~IfStatementNode();
+        void Interpret();
+    private:
+        ExpressionNode * mExpression;
+        StatementNode * mStatement;
+
+};
+
+class WhileStatementNode : public StatementNode {
+    public:
+        WhileStatementNode(ExpressionNode * exp,StatementNode * statement);
+        ~WhileStatementNode();
+        void Interpret();
+    private:
+        ExpressionNode * mExpression;
+        StatementNode * mStatement;
+
+};
+
+
 class ExpressionNode {
     public:
         virtual int Evaluate() = 0;
         virtual ~ExpressionNode();
         //virtual void Interpret() = 0;
 };
+
+
 
 class IntegerNode: public ExpressionNode {
     public:
@@ -206,5 +235,18 @@ class NotEqualNode: public BinaryOperatorNode {
         NotEqualNode(ExpressionNode* left, ExpressionNode* right);
         int Evaluate();
 };
+
+class AndNode : public BinaryOperatorNode {
+    public:
+        AndNode(ExpressionNode * left, ExpressionNode * right);
+        int Evaluate();
+};
+
+class OrNode : public BinaryOperatorNode {
+    public:
+        OrNode(ExpressionNode * left, ExpressionNode * right);
+        int Evaluate();
+};
+
 
 #endif

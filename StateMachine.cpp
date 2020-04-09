@@ -39,6 +39,10 @@ StateMachineClass::StateMachineClass(){
     mLegalMoves[START_STATE][LCURLY_CHAR]= LCURLY_STATE;
     mLegalMoves[START_STATE][RCURLY_CHAR]= RCURLY_STATE;
     mLegalMoves[START_STATE][ENDFILE_CHAR]= ENDFILE_STATE;
+    mLegalMoves[START_STATE][AND_CHAR] = HALFAND_STATE;
+    mLegalMoves[HALFAND_STATE][AND_CHAR] = AND_STATE;
+    mLegalMoves[START_STATE][PIPE_CHAR] = HALFOR_STATE;
+    mLegalMoves[HALFOR_STATE][PIPE_CHAR] = OR_STATE;
     for (int j=0;j<NUM_CHARS;j++) {
         mLegalMoves[COMMENT_STATE][j] = COMMENT_STATE;
         mLegalMoves[HALFENDCOMMENT_STATE][j] = COMMENT_STATE;
@@ -77,6 +81,8 @@ StateMachineClass::StateMachineClass(){
     mCorrespondingTokenTypes[RPAREN_STATE] =RPAREN_TOKEN;
     mCorrespondingTokenTypes[LCURLY_STATE] = LCURLY_TOKEN;
     mCorrespondingTokenTypes[RCURLY_STATE] = RCURLY_TOKEN;
+    mCorrespondingTokenTypes[AND_STATE] = AND_TOKEN;
+    mCorrespondingTokenTypes[OR_STATE] = OR_TOKEN;
     mCorrespondingTokenTypes[ENDFILE_STATE] = ENDFILE_TOKEN;
 
 
@@ -124,8 +130,11 @@ MachineState StateMachineClass::UpdateState(char currentCharacter,TokenType & co
         charType = ENDFILE_CHAR;
     } else if (currentCharacter == '!') {
         charType = EXCLAMATION_CHAR;
+    } else if (currentCharacter == '&') {
+        charType = AND_CHAR;
+    } else if (currentCharacter == '|') {
+        charType = PIPE_CHAR;
     }
-
     correspondingTokenType = mCorrespondingTokenTypes[mCurrentState];
     mCurrentState = mLegalMoves[mCurrentState][charType];
     return mCurrentState;
