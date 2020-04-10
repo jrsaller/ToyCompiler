@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <cstdio>
 using namespace std;
-#include "instructions.h"
+#include "Instructions.h"
 
 #pragma warning( disable : 4311 )
 
@@ -54,24 +54,35 @@ void HelperPrintInteger(void);
 
 void InstructionsClass::Encode(unsigned char c)
 {
-	if (mCurrent < MAX_INSTRUCTIONS)
+	if (mCurrent < MAX_INSTRUCTIONS) 
 		mCode[mCurrent++] = c;
 	else
 	{
-		cerr << "Error. Used up all " << MAX_INSTRUCTIONS
-			<< " instructions." << endl;
+		cerr << "Error. Used up all " << MAX_INSTRUCTIONS << " instructions." << endl;
 		exit(1);
 	}	
 }
 
 void InstructionsClass::Encode(int x)
 {
-	*((int*)(&(mCode [mCurrent]))) = x;
-	mCurrent+=4;
+	if (mCurrent < MAX_INSTRUCTIONS) {
+		*((int*)(&(mCode[mCurrent]))) = x;
+		mCurrent+=4;
+	} else {
+		cerr << "Error. Used up all " << MAX_INSTRUCTIONS << " instructions." << endl;
+		exit(1);
+	}
 }
 
 void InstructionsClass::Encode(long long x)
 {
+	if (mCurrent < MAX_INSTRUCTIONS) {
+		*((long long*)(&(mCode[mCurrent]))) = x;
+		mCurrent += 8;
+	} else {
+		cerr << "Error. Used up all " << MAX_INSTRUCTIONS << " instructions." << endl;
+		exit(1);
+	}
 }
 
 void InstructionsClass::Encode(void * p)
@@ -109,24 +120,21 @@ InstructionsClass::InstructionsClass()
 	Encode(PUSH_EBP);
 	Encode(MOV_EBP_ESP1);
 	Encode(MOV_EBP_ESP2);
+	mData[10] = 2000;
 }
 
 void InstructionsClass::Finish()
 {
 	Encode(POP_EBP);
 	Encode(NEAR_RET);
-
-	cout << "Finished creating " << mCurrent << " bytes of machine code" << endl;
 }
 
 void InstructionsClass::Execute()
 {
-	cout << "About to Execute the machine code..." << endl;
-	void * ptr = InstructionsClass::mCode;
+	void * ptr = mCode;
 	void (*f)(void);
 	f = (void (*)(void)) ptr ;
 	f();
-	cout << "\nThere and back again!" << endl << endl;
 }
 
 void InstructionsClass::PrintAllMachineCodes()
@@ -139,6 +147,9 @@ void InstructionsClass::PrintAllMachineCodes()
 
 void InstructionsClass::PushValue(int value)
 {
+	Encode(IMMEDIATE_TO_EAX);
+	Encode(value);
+	Encode(PUSH_EAX);
 }
 
 void InstructionsClass::Call(void * function_address)
@@ -154,7 +165,7 @@ void InstructionsClass::Call(void * function_address)
 // This is called by the generated machine language code.
 void HelperPrintInteger(void)
 {
-	printf("%i ", InstructionsClass::gPrintInteger);
+	printf("%i \n", InstructionsClass::gPrintInteger);
 }
 
 void InstructionsClass::PopAndWrite()
@@ -189,6 +200,13 @@ void InstructionsClass::PushVariable(unsigned int index)
 
 void InstructionsClass::PopAndStore(unsigned int index)
 {
+	//POP_EAX to move int from top of stack to EAX
+	//EAX_TO_MEM to move it from EAX to correct RAM address as found by calling GetMem
+	//put RAM after EAX_TO_MEM
+	int * variable_address = GetMem(index);
+	Encode(POP_EAX);
+	Encode(EAX_TO_MEM);
+	Encode(variable_address);
 }
 
 
@@ -216,10 +234,21 @@ void InstructionsClass::PopPopAddPush()
 
 void InstructionsClass::PopPopSubPush()
 {
+	Encode(POP_EBX);
+	Encode(POP_EAX);
+	Encode(SUB_EAX_EBX1);
+	Encode(SUB_EAX_EBX2);
+	Encode(PUSH_EAX);
 }
 
 void InstructionsClass::PopPopMulPush()
 {
+	Encode(POP_EBX);
+	Encode(POP_EAX);
+	Encode(MUL_EAX_EBX1);
+	Encode(MUL_EAX_EBX2);
+	Encode(PUSH_EAX);
+
 }
 
 void InstructionsClass::PopPopDivPush()
@@ -259,18 +288,22 @@ void InstructionsClass::PopPopLessEqualPush()
 
 void InstructionsClass::PopPopGreaterPush()
 {
+	PopPopComparePush(JG);
 }
 
 void InstructionsClass::PopPopGreaterEqualPush()
 {
+	PopPopComparePush(JGE);
 }
 
 void InstructionsClass::PopPopEqualPush()
 {
+	PopPopComparePush(JE);
 }
 
 void InstructionsClass::PopPopNotEqualPush()
 {
+	PopPopComparePush(JNE);
 }
 
 void InstructionsClass::PopPopAndPush()
