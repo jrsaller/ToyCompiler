@@ -28,7 +28,9 @@ StateMachineClass::StateMachineClass(){
     mLegalMoves[GREATER_STATE][EQUAL_CHAR] = GREATEREQUAL_STATE;;
     mLegalMoves[ASSIGNMENT_STATE][EQUAL_CHAR]= EQUAL_STATE;
     mLegalMoves[START_STATE][PLUS_CHAR]= PLUS_STATE;
+    mLegalMoves[PLUS_STATE][EQUAL_CHAR] = PLUSEQUAL_STATE;
     mLegalMoves[START_STATE][DASH_CHAR]= MINUS_STATE;
+    mLegalMoves[MINUS_STATE][EQUAL_CHAR] = MINUSEQUAL_STATE;
     mLegalMoves[START_STATE][STAR_CHAR]= TIMES_STATE;
     mLegalMoves[START_STATE][FSLASH_CHAR]= DIVIDE_STATE;
     mLegalMoves[DIVIDE_STATE][STAR_CHAR]= COMMENT_STATE;
@@ -73,7 +75,9 @@ StateMachineClass::StateMachineClass(){
     mCorrespondingTokenTypes[INSERTION_STATE] = INSERTION_TOKEN;
     mCorrespondingTokenTypes[ASSIGNMENT_STATE] = ASSIGNMENT_TOKEN;
     mCorrespondingTokenTypes[PLUS_STATE] = PLUS_TOKEN;
+    mCorrespondingTokenTypes[PLUSEQUAL_STATE] = PLUSEQUAL_TOKEN;
     mCorrespondingTokenTypes[MINUS_STATE] = MINUS_TOKEN;
+    mCorrespondingTokenTypes[MINUSEQUAL_STATE] = MINUSEQUAL_TOKEN;
     mCorrespondingTokenTypes[TIMES_STATE] = TIMES_TOKEN;
     mCorrespondingTokenTypes[DIVIDE_STATE] = DIVIDE_TOKEN;
     mCorrespondingTokenTypes[SEMICOLON_STATE] = SEMICOLON_TOKEN;

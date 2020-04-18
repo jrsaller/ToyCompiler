@@ -165,7 +165,7 @@ void InstructionsClass::Call(void * function_address)
 // This is called by the generated machine language code.
 void HelperPrintInteger(void)
 {
-	printf("%i \n", InstructionsClass::gPrintInteger);
+	printf("%i", InstructionsClass::gPrintInteger);
 }
 
 void InstructionsClass::PopAndWrite()

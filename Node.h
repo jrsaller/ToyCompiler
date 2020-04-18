@@ -14,6 +14,8 @@ class StatementGroupNode;
 class StatementNode;
 class DeclarationStatementNode;
 class AssignmentStatementNode;
+class PlusEqualsStatementNode;
+class MinusEqualsStatementNode;
 class CoutStatementNode;
 class BlockNode;
 class IfStatementNode;
@@ -93,6 +95,7 @@ class DeclarationStatementNode: public StatementNode {
 
 class AssignmentStatementNode:public StatementNode {
     public:
+        AssignmentStatementNode();
         AssignmentStatementNode(IdentifierNode* idnode,ExpressionNode* expnode);
         ~AssignmentStatementNode();
         void Interpret();
@@ -101,6 +104,27 @@ class AssignmentStatementNode:public StatementNode {
         IdentifierNode* mIdNode;
         ExpressionNode* mExpNode;
 };
+
+class PlusEqualsStatementNode:public AssignmentStatementNode {
+    public:
+	PlusEqualsStatementNode(IdentifierNode* idnode,ExpressionNode* expnode);
+	void Interpret();
+        void Code(InstructionsClass &machineCode);
+    private:
+        IdentifierNode* mIdNode;
+        ExpressionNode* mExpNode;
+};
+
+class MinusEqualsStatementNode:public AssignmentStatementNode {
+    public:
+	MinusEqualsStatementNode(IdentifierNode* idnode,ExpressionNode* expnode);
+	void Interpret();	
+        void Code(InstructionsClass &machineCode);
+    private:
+        IdentifierNode* mIdNode;
+        ExpressionNode* mExpNode;
+};
+
 
 class CoutStatementNode: public StatementNode {
     public:

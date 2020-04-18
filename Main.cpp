@@ -204,5 +204,5 @@ void CodeAndExecute(std::string inputFile) {
 
 
 int main() {
-    CodeAndExecute("testfile2.cpp");
+    CodeAndExecute("testfile.cpp");
 }

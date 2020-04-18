@@ -107,10 +107,26 @@ DeclarationStatementNode * ParserClass::DeclarationStatement(){
 AssignmentStatementNode * ParserClass::AssignmentStatement(){
     MSG("Assignment Statement");
     IdentifierNode * id = Identifier();
-    Match(ASSIGNMENT_TOKEN);
-    ExpressionNode * e = Expression();
-    Match(SEMICOLON_TOKEN);
-    return new AssignmentStatementNode(id,e);
+    //Peek Ahead
+    TokenType t = mScanner->PeekNextToken().GetTokenType();
+    if (t==ASSIGNMENT_TOKEN) {
+        Match(t);
+        ExpressionNode * e = Expression();
+        Match(SEMICOLON_TOKEN);
+        return new AssignmentStatementNode(id,e);
+    } else if(t==PLUSEQUAL_TOKEN) {
+        Match(t);
+        ExpressionNode * e = Expression();
+        Match(SEMICOLON_TOKEN);
+        return new PlusEqualsStatementNode(id,e);
+    } else if (t == MINUSEQUAL_TOKEN) {
+        Match(t);
+        ExpressionNode * e = Expression();
+        Match(SEMICOLON_TOKEN);
+        return new MinusEqualsStatementNode(id,e);
+    } else {
+    	return 0;
+    }
 }
 CoutStatementNode * ParserClass::CoutStatement(){
     MSG("Cout Statement");

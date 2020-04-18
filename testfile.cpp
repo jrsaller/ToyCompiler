@@ -15,6 +15,9 @@ void main() {
     val = sum != val;
 
     val = 12;
+    sum += 10;
+    cout << sum << endl;
+    sum -= 10;
     cout << sum << endl;
     if (val == 12 && sum == 435) {
         cout << 101010 << endl;
@@ -34,7 +37,7 @@ void main() {
      cout << 10101010 << endl;
     int x;
     x=5;
-     cout << 10 << x+2 << endl << endl << x*3+1 << endl ;
+     cout << 10 << x+2 << endl << endl << x*3+1 << endl << endl << endl << endl << x*20 << endl;
 
 
 

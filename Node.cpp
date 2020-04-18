@@ -113,6 +113,7 @@ void DeclarationStatementNode::Code(InstructionsClass &machineCode) {
     mNode->DeclareVariable();
 }
 
+
 AssignmentStatementNode::AssignmentStatementNode(IdentifierNode* idnode,ExpressionNode* expnode) {
     mIdNode = idnode;
     mExpNode = expnode;
@@ -137,7 +138,47 @@ void AssignmentStatementNode::Code(InstructionsClass &machineCode) {
     machineCode.PopAndStore(index);
 }
 
-CoutStatementNode::CoutStatementNode(std::vector<ExpressionNode*> nodes) {
+PlusEqualsStatementNode::PlusEqualsStatementNode(IdentifierNode* idnode,ExpressionNode* expnode)
+	:AssignmentStatementNode(idnode,expnode)
+{
+	mIdNode = idnode;
+	mExpNode = expnode;
+}
+
+void PlusEqualsStatementNode::Interpret() {}
+void PlusEqualsStatementNode::Code(InstructionsClass &machineCode) {
+	//push id index stack
+	MSG("GIMME THAT INDEX")
+	mIdNode->CodeEvaluate(machineCode);
+	MSG("push value");
+	//push expression on stack
+	mExpNode->CodeEvaluate(machineCode);
+	MSG("code evaluate");
+	//poppopaddpush
+	machineCode.PopPopAddPush();
+	MSG("ppap");
+	//popandstore
+	machineCode.PopAndStore(mIdNode->GetIndex());
+	MSG("pas");
+}
+
+
+MinusEqualsStatementNode::MinusEqualsStatementNode(IdentifierNode* idnode,ExpressionNode* expnode) 
+    : AssignmentStatementNode(idnode,expnode)  {
+    mIdNode = idnode;
+    mExpNode = expnode;    
+}
+
+void MinusEqualsStatementNode::Interpret() {}
+void MinusEqualsStatementNode::Code(InstructionsClass &machineCode) {
+	mIdNode->CodeEvaluate(machineCode);
+	mExpNode->CodeEvaluate(machineCode);
+	machineCode.PopPopSubPush();
+	machineCode.PopAndStore(mIdNode->GetIndex());
+}
+
+
+    CoutStatementNode::CoutStatementNode(std::vector<ExpressionNode*> nodes) {
     mNodes = nodes;
     MSG("CREATED COUT NODE");
 }
@@ -152,7 +193,7 @@ CoutStatementNode::~CoutStatementNode() {
 void CoutStatementNode::Interpret() {
     MSG("INTERPRET COUT");
     for (ExpressionNode* node: mNodes) {
-        if (node){ 
+        if (node != NULL){ 
             int val = node->Evaluate();
             std::cout << val;
         } else {
@@ -163,8 +204,12 @@ void CoutStatementNode::Interpret() {
 
 void CoutStatementNode::Code(InstructionsClass& machineCode) {
     for (ExpressionNode* node: mNodes) {
-        node->CodeEvaluate(machineCode);
-        machineCode.PopAndWrite();
+	if (node != NULL) {
+            node->CodeEvaluate(machineCode);
+            machineCode.PopAndWrite();
+	} else {
+	    machineCode.WriteEndl();
+	}
     }
 }
 
@@ -242,6 +287,7 @@ int IntegerNode::Evaluate() {
 }
 
 void IntegerNode::CodeEvaluate(InstructionsClass& machineCode){
+    MSG("CODE EVAL INTEGER NODE");
     machineCode.PushValue(mInt);
 }
 
