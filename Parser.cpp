@@ -114,11 +114,24 @@ AssignmentStatementNode * ParserClass::AssignmentStatement(){
 }
 CoutStatementNode * ParserClass::CoutStatement(){
     MSG("Cout Statement");
+    std::vector<ExpressionNode*> nodes;
     Match(COUT_TOKEN);
-    Match(INSERTION_TOKEN);
-    ExpressionNode * e = Expression();
+    //needs endl or expression
+    TokenClass tt = mScanner->PeekNextToken();
+    TokenType t = tt.GetTokenType();
+    do {
+        Match(INSERTION_TOKEN);
+        t = mScanner->PeekNextToken().GetTokenType();
+        if (t == ENDL_TOKEN) {
+            Match(t);
+            nodes.push_back(NULL);
+        }else{
+            ExpressionNode * e = Expression();
+            nodes.push_back(e);
+        }
+    } while (mScanner->PeekNextToken().GetTokenType() == INSERTION_TOKEN);
     Match(SEMICOLON_TOKEN);
-    return new CoutStatementNode(e);
+    return new CoutStatementNode(nodes);
 }
 
 IfStatementNode * ParserClass::IfStatement() {

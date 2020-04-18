@@ -26,6 +26,8 @@ void TokenClass::CheckReserved(){
         mType=IF_TOKEN;
     } else if (mLexeme == "while") {
         mType = WHILE_TOKEN;
+    } else if (mLexeme == "endl") {
+        mType = ENDL_TOKEN;
     }
 }
 std::ostream& operator<<(std::ostream & out, const TokenClass & tc){

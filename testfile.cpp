@@ -2,7 +2,7 @@ void main() {
     
     int sum;
     sum = 35 + 400;
-    cout << sum;
+    cout << sum << endl;
     //sum = sum == 435;
     sum = sum * 1;
     sum = sum / 1;
@@ -15,23 +15,26 @@ void main() {
     val = sum != val;
 
     val = 12;
-    cout << sum;
+    cout << sum << endl;
     if (val == 12 && sum == 435) {
-        cout << 101010;
-        cout << 1203393498234;
-        cout << 123897129;
+        cout << 101010 << endl;
+        cout << 1203393498234 << endl;
+        cout << 123897129 << endl;
     }
 
     if (val == 15 || sum == 435) {
-        cout << val;
-        cout << sum;
+        cout << val << endl;
+        cout << sum << endl;
     }
     cout << val;
      while (val < 25) {
          val = val + 1;
-         cout << val;
+         cout << val << endl;
      }
-     cout << 10101010;
+     cout << 10101010 << endl;
+    int x;
+    x=5;
+     cout << 10 << x+2 << endl << endl << x*3+1 << endl ;
 
 
 

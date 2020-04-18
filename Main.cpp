@@ -153,12 +153,13 @@
 }
 */
 
-/*
-int main() {
+
+/*int main() {
     ScannerClass scanner("testfile.cpp");
     SymbolTableClass st;
     ParserClass parse(&scanner,&st);
     StartNode * sn = parse.Start();
+    std::cout << "Time to interpret" << std::endl;
     sn->Interpret();
     
     std::cout << "You've got valid code!" << std::endl;
@@ -166,7 +167,7 @@ int main() {
     return 0;
 }*/
 
-using namespace std;
+/*using namespace std;
 int main()
 {
 	unsigned char mCode[] = {0x55, 0x8B, 0xEC, 0X5d, 0XC3};
@@ -177,4 +178,31 @@ int main()
 	f(); // call the array as if it were a function
 	cout << "There and back again!\n\n";
 	return 0;
+}*/
+
+void CodeAndExecute(std::string inputFile) {
+    //Create scanner, symbol table, and parser objects
+    ScannerClass scanner(inputFile);
+    SymbolTableClass symbolTable;
+    ParserClass parser(&scanner,&symbolTable);
+
+    //Do the parsing which results in a parse tree
+    StartNode * root = parser.Start();
+
+    //Create the machine code instructions from the parse tree
+    InstructionsClass machineCode;
+    root->Code(machineCode);
+    machineCode.Finish();
+    machineCode.PrintAllMachineCodes();
+
+    // Execute the machine code instructions previously created
+    machineCode.Execute();
+
+    //cleanup recursively
+    delete root;
+}
+
+
+int main() {
+    CodeAndExecute("testfile2.cpp");
 }
